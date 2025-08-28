@@ -77,6 +77,9 @@ public class Member : Entity
 
     public void UpdateGender(Gender gender)
     {
+        if (Spouse != null && Spouse.Gender == gender)
+            throw new InvalidOperationException("Spouse must be of the opposite gender.");
+
         Gender = gender;
         UpdateTimestamp();
     }
