@@ -27,4 +27,18 @@ public class MemberTests
         Assert.Null(alice.Spouse);
         Assert.Null(beth.Spouse);
     }
+
+    [Fact]
+    public void UpdateGender_WithSpouseOfSameGender_ThrowsInvalidOperationException()
+    {
+        var john = new Member("John", "Doe", new DateOnly(1990, 1, 1), new DateOnly(2020, 1, 1), Gender.Male);
+        var jane = new Member("Jane", "Smith", new DateOnly(1991, 2, 2), new DateOnly(2021, 2, 2), Gender.Female);
+
+        john.SetSpouse(jane);
+
+        Assert.Throws<InvalidOperationException>(() => john.UpdateGender(Gender.Female));
+        Assert.Equal(Gender.Male, john.Gender);
+        Assert.Equal(jane, john.Spouse);
+        Assert.Equal(john, jane.Spouse);
+    }
 }
