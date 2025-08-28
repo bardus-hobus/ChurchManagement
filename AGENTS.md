@@ -13,8 +13,7 @@ This repository uses the following conventions and requirements:
   - Maintain at least 85% code coverage for the affected projects. Use a coverage tool such as [coverlet](https://github.com/coverlet-coverage/coverlet) and fail the build if coverage drops below 85%.
 
 - **Database and Data Access**
-  - Use [Dapper](https://github.com/DapperLib/Dapper) for all SQL/database access.
-  - All queries must be parameterized.
+  - Use Entity Framework Core for all SQL/database access.
 
 - **Frontend**
   - Use Razor Pages for UI.
