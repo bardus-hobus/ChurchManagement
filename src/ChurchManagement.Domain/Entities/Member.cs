@@ -34,7 +34,7 @@ public class Member : Entity
         BirthDate = birthDate;
         MembershipDate = membershipDate;
         Gender = gender;
-        
+
         // Default permission for new members
         _permissions.Add(PermissionType.Member);
     }
@@ -58,7 +58,7 @@ public class Member : Entity
         BaptizedDate = baptizedDate;
         Email = email;
         PhoneNumber = phoneNumber;
-        
+
         // Default permission for reconstituted members
         _permissions.Add(PermissionType.Member);
     }
@@ -107,6 +107,9 @@ public class Member : Entity
 
     public void SetSpouse(Member? spouse)
     {
+        if (spouse != null && spouse.Gender == Gender)
+            throw new InvalidOperationException("Spouse must be of the opposite gender.");
+
         // Remove existing spouse relationship
         if (Spouse != null && Spouse.Spouse == this)
         {
@@ -165,9 +168,9 @@ public class Member : Entity
         if (string.IsNullOrWhiteSpace(groupName))
             return;
 
-        var itemToRemove = _groups.FirstOrDefault(g => 
+        var itemToRemove = _groups.FirstOrDefault(g =>
             string.Equals(g, groupName.Trim(), StringComparison.OrdinalIgnoreCase));
-        
+
         if (itemToRemove != null)
         {
             _groups.Remove(itemToRemove);
