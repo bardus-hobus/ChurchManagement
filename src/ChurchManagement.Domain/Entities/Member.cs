@@ -14,13 +14,13 @@ public class Member : Entity
     public DateOnly BirthDate { get; private set; }
     public DateOnly MembershipDate { get; private set; }
     public DateOnly? BaptizedDate { get; private set; }
-    public Member? Spouse { get; private set; }
-    public IReadOnlyList<Member> Children => _children.AsReadOnly();
     public Gender Gender { get; private set; }
     public Email? Email { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
     public IReadOnlyList<string> Groups => _groups.AsReadOnly();
     public IReadOnlyList<PermissionType> Permissions => _permissions.AsReadOnly();
+
+    private Member() { } //EF
 
     // Constructor for creating new members
     public Member(
@@ -102,51 +102,6 @@ public class Member : Entity
     public void SetPhoneNumber(PhoneNumber? phoneNumber)
     {
         PhoneNumber = phoneNumber;
-        UpdateTimestamp();
-    }
-
-    public void SetSpouse(Member? spouse)
-    {
-        if (spouse != null && spouse.Gender == Gender)
-            throw new InvalidOperationException("Spouse must be of the opposite gender.");
-
-        // Remove existing spouse relationship
-        if (Spouse != null && Spouse.Spouse == this)
-        {
-            Spouse.Spouse = null;
-            Spouse.UpdateTimestamp();
-        }
-
-        Spouse = spouse;
-
-        // Set reciprocal relationship
-        if (spouse != null && spouse.Spouse != this)
-        {
-            spouse.Spouse = this;
-            spouse.UpdateTimestamp();
-        }
-
-        UpdateTimestamp();
-    }
-
-    public void AddChild(Member child)
-    {
-        if (child == null)
-            throw new ArgumentNullException(nameof(child));
-
-        if (_children.Contains(child))
-            return;
-
-        _children.Add(child);
-        UpdateTimestamp();
-    }
-
-    public void RemoveChild(Member child)
-    {
-        if (child == null)
-            throw new ArgumentNullException(nameof(child));
-
-        _children.Remove(child);
         UpdateTimestamp();
     }
 
